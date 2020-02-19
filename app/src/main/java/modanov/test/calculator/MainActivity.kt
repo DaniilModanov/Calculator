@@ -15,6 +15,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         var usedType = ""
         val inputTV = findViewById<TextView>(R.id.inputTV)
+        val btn0 = findViewById<Button>(R.id.btn0)
         val btn1 = findViewById<Button>(R.id.btn1)
         val btn2 = findViewById<Button>(R.id.btn2)
         val btn3 = findViewById<Button>(R.id.btn3)
@@ -29,6 +30,11 @@ class MainActivity : AppCompatActivity() {
         val btnDivide = findViewById<Button>(R.id.btnDivide)
         val btnEqual = findViewById<Button>(R.id.btnEqual)
         val btnMultiply = findViewById<Button>(R.id.btnMultiply)
+        val btnClear = findViewById<Button>(R.id.btnClear)
+        val btnBackspace = findViewById<Button>(R.id.btnBackspace)
+        val btnPercent = findViewById<Button>(R.id.btnPercentage)
+
+        addNum(btn0, 0)
         addNum(btn1, 1)
         addNum(btn2, 2)
         addNum(btn3, 3)
