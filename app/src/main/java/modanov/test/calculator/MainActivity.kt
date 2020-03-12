@@ -1,11 +1,11 @@
 package modanov.test.calculator
-
 import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
 import kotlinx.android.synthetic.main.activity_main.*
+import net.objecthunter.exp4j.ExpressionBuilder
 
 class MainActivity : AppCompatActivity() {
 
@@ -13,87 +13,103 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        var usedType = ""
-        val inputTV = findViewById<TextView>(R.id.inputTV)
-        val btn0 = findViewById<Button>(R.id.btn0)
-        val btn1 = findViewById<Button>(R.id.btn1)
-        val btn2 = findViewById<Button>(R.id.btn2)
-        val btn3 = findViewById<Button>(R.id.btn3)
-        val btn4 = findViewById<Button>(R.id.btn4)
-        val btn5 = findViewById<Button>(R.id.btn5)
-        val btn6 = findViewById<Button>(R.id.btn6)
-        val btn7 = findViewById<Button>(R.id.btn7)
-        val btn8 = findViewById<Button>(R.id.btn8)
-        val btn9 = findViewById<Button>(R.id.btn9)
-        val btnMinus = findViewById<Button>(R.id.btnMinus)
-        val btnPlus = findViewById<Button>(R.id.btnPlus)
-        val btnDivide = findViewById<Button>(R.id.btnDivide)
-        val btnEqual = findViewById<Button>(R.id.btnEqual)
-        val btnMultiply = findViewById<Button>(R.id.btnMultiply)
-        val btnClear = findViewById<Button>(R.id.btnClear)
-        val btnBackspace = findViewById<Button>(R.id.btnBackspace)
-        val btnPercent = findViewById<Button>(R.id.btnPercentage)
 
-        addNum(btn0, 0)
-        addNum(btn1, 1)
-        addNum(btn2, 2)
-        addNum(btn3, 3)
-        addNum(btn4, 4)
-        addNum(btn5, 5)
-        addNum(btn6, 6)
-        addNum(btn7, 7)
-        addNum(btn8, 8)
-        addNum(btn9, 9)
+        var leftBracketCounter = 0
+        var rightBracketCounter = 0
+
+        addTextToField(btn0, "0")
+        addTextToField(btn1, "1")
+        addTextToField(btn2, "2")
+        addTextToField(btn3, "3")
+        addTextToField(btn4, "4")
+        addTextToField(btn5, "5")
+        addTextToField(btn6, "6")
+        addTextToField(btn7, "7")
+        addTextToField(btn8, "8")
+        addTextToField(btn9, "9")
+        addTextToField(btnMinus, "-")
+        addTextToField(btnPlus, "+")
+        addTextToField(btnDivide, "/")
+        addTextToField(btnMultiply, "*")
+        addTextToField(btnPoint, ".")
+        addTextToField(btnRightBracket, ")")
+        addTextToField(btnLeftBracket, "(")
 
 
         btnClear.setOnClickListener {
             inputTV.text = ""
         }
-        btnMultiply.setOnClickListener() {
-            if (usedType == "") {
-                inputTV.text = inputTV.text.toString() + " * "
-                usedType = "*"
-            }
-        }
-        btnPlus.setOnClickListener() {
-            if (usedType == "") {
-                inputTV.text = inputTV.text.toString() + " + "
-                usedType = "+"
-            }
-        }
-        btnMinus.setOnClickListener() {
-            if (usedType == "") {
-                inputTV.text = inputTV.text.toString() + " - "
-                usedType = "-"
-            }
-        }
-        btnDivide.setOnClickListener() {
-            if (usedType == "") {
-                inputTV.text = inputTV.text.toString() + " / "
-                usedType = "/"
-            }
-        }
-        btnEqual.setOnClickListener() {
-            if (usedType != "") {
-                val ss = inputTV.text.toString().split(" $usedType ")
-                val num1 = ss[0].toInt()
-                val num2 = ss[1].toInt()
-                when (usedType) {
-                    "+" -> inputTV.text = inputTV.text.toString() + " = " + (num1 + num2).toString()
-                    "-" -> inputTV.text = inputTV.text.toString() + " = " + (num1 - num2).toString()
-                    "*" -> inputTV.text = inputTV.text.toString() + " = " + (num1 * num2).toString()
-                    "/" -> inputTV.text = inputTV.text.toString() + " = " + (num1 / num2).toString()
+        btnBackspace.setOnClickListener {
+            val str = inputTV.text.toString()
+            if (inputTV.text.isNotEmpty()) {
+                if (str.substring(str.length - 1, str.length) == " ") {
+                    inputTV.text = str.substring(0, str.length - 3)
+                } else {
+                    inputTV.text = str.substring(0, str.length - 1)
                 }
-                usedType = ""
+            } else {
+                inputTV.text = ""
             }
         }
-    }
-    @SuppressLint("SetTextI18n")
-    fun addNum (btn: Button, num: Int)
-    {
-        btn.setOnClickListener{
-            inputTV.text = inputTV.text.toString() + num.toString()
+        btnMultiply.setOnClickListener {
+            if (!inputTV.text.toString().endsWith("+") and !inputTV.text.toString().endsWith("-") and
+                !inputTV.text.toString().endsWith("/") and !inputTV.text.toString().endsWith("*")
+            ) {
+                inputTV.text = inputTV.text.toString() + "*"
+            }
+        }
+        btnPlus.setOnClickListener {
+            if (!inputTV.text.toString().endsWith("+") and !inputTV.text.toString().endsWith("-") and
+                !inputTV.text.toString().endsWith("/") and !inputTV.text.toString().endsWith("*")
+            ) {
+                inputTV.text = inputTV.text.toString() + "+"
+            }
+        }
+        btnMinus.setOnClickListener {
+            if (!inputTV.text.toString().endsWith("+") and !inputTV.text.toString().endsWith("-") and
+                !inputTV.text.toString().endsWith("/") and !inputTV.text.toString().endsWith("*")
+            ) {
+                inputTV.text = inputTV.text.toString() + "-"
+            }
+        }
+        btnDivide.setOnClickListener {
+            if (!inputTV.text.toString().endsWith("+") and !inputTV.text.toString().endsWith("-") and
+                !inputTV.text.toString().endsWith("/") and !inputTV.text.toString().endsWith("*")
+            ) {
+                inputTV.text = inputTV.text.toString() + "/"
+            }
+        }
+
+        btnEqual.setOnClickListener {
+            if (leftBracketCounter==rightBracketCounter) {
+                val e = ExpressionBuilder(inputTV.text.toString()).build()
+                inputTV.text = "${inputTV.text}="
+                resTV.text = e.evaluate().toString()
+            } else {
+                resTV.text = "Ошибка"
+            }
+        }
+        btnLeftBracket.setOnClickListener {
+            inputTV.text = inputTV.text.toString() + "("
+            leftBracketCounter++
+        }
+        btnRightBracket.setOnClickListener {
+            inputTV.text = inputTV.text.toString() + ")"
+            rightBracketCounter++
         }
     }
 
+    @SuppressLint("SetTextI18n")
+    fun addTextToField(btn: Button, str: String) {
+        btn.setOnClickListener {
+            if (inputTV.text.toString().endsWith("="))
+            {
+                inputTV.text = str
+            }
+            else {
+                inputTV.text = inputTV.text.toString() + str
+            }
+        }
+    }
 }
+
